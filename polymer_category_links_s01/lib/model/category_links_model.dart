@@ -21,7 +21,8 @@ class CategoryLinksModel extends ConceptModel {
     var dartCategory = new Category();
     dartCategory.code = 'Dart';
     dartCategory.description = 'Web programming language, tools and how to.';
-
     categories.add(dartCategory);
+
+    categories.order();
   }
 }

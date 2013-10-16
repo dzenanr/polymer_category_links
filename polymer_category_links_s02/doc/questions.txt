@@ -1,11 +1,11 @@
 Questions
 
----
+===
 The first click on the Show Add button in the CategoryTable
 does not show the add section!?
----
+===
 
----
+===
 CategoryTable component has categories
   @published Categories categories;
 that are passed to it when the component is used:
@@ -23,11 +23,21 @@ that are passed to it when the component is used:
   </template>
 
 Are the two categories the same object?
-Probably not.
+Yes (almost sure).
 
 If a category is added to the second categories,
 how to refresh the first categories?
----
+
+The categories, when first used, must be observed.
+In polymer_app.dart:
+does not work: categories = toObservable(categoryLinksModel.categories);
+what works:
+categories = categoryLinksModel.categories;
+categories.internalList = toObservable(categories.internalList);
+In repeat="{{category in categories.internalList}}":
+you cannot use categories.toList();
+you must use categories.internalList.
+===
 
 
 
