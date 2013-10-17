@@ -51,6 +51,10 @@ you cannot use categories.toList();
 you must use categories.internalList.
 ===
 
-
+===
+category_edit.html
+input field: value="{{category.description}}"
+cannot change the value !?
+===
 
 
