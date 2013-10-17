@@ -7,9 +7,9 @@ class CategoryAdd extends PolymerElement {
   @published Categories categories;
 
   add(Event e, var detail, Node target) {
-    InputElement code = shadowRoot.query("#code");
-    InputElement description = shadowRoot.query("#description");
-    Element message = shadowRoot.query("#message");
+    InputElement code = $['code'];
+    InputElement description = $['description'];
+    Element message = $['message'];
     var error = false;
     message.text = '';
     if (code.value.trim() == '') {
