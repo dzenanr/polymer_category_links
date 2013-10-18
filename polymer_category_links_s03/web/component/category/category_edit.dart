@@ -6,12 +6,16 @@ import 'package:polymer/polymer.dart';
 class CategoryEdit extends PolymerElement {
   @published Categories categories;
   @published Category category;
+  @published String description;
+
+  inserted() {
+    super.inserted();
+    description = category.description;
+  }
 
   update(Event e, var detail, Node target) {
-    //InputElement description = shadowRoot.query('#${category.code}-description');
-    InputElement description = $['${category.code}-description'];
-    //category.description = description.value;
-    //categories.order(); // to see a new description in the list ?
+    category.description = description;
+    categories.order(); // to see a new description in the list
     var polymerApp = query('#polymer-app');
     var categoryTable = polymerApp.shadowRoot.query('#category-table').xtag;
     categoryTable.showEdit = false;

@@ -55,6 +55,19 @@ you must use categories.internalList.
 category_edit.html
 input field: value="{{category.description}}"
 cannot change the value !?
+
+Use a non-composite property:
+
+@published String description;
+
+  inserted() {
+    super.inserted();
+    description = category.description;
+  }
+
+html:  value="{{description}}
+
+To try: add @published in front of description property in the model.
 ===
 
 
