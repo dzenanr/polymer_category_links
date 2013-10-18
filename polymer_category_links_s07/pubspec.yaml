@@ -1,0 +1,8 @@
+name: polymer_category_links
+author: Dzenan Ridjanovic <dzenanr@gmail.com>
+description: A model with 1 concept that uses dartlero.
+homepage: http://ondart.me/
+dependencies:
+  dartlero:
+    git: git://github.com/dzenanr/dartlero.git
+  polymer: any

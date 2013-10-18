@@ -1,0 +1,64 @@
+<polymer-element name="link-edit">
+  <template>
+    <style>
+      label {
+        font-family: verdana, sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background: #336799;
+        padding: 1px;
+        border-right: 1px solid #999999;
+        border-bottom: 1px solid #999999;
+      }
+      input {
+        font-family: arial, sans-serif;
+        font-size: 14px;
+      }
+      button {
+        padding: 1px;
+        background: #ffcc99;
+        border-right: 1px solid #999;
+        border-bottom: 1px solid #999;
+        border-style: outset;
+        border-color: #d7b9c9;
+        font-weight: bold;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      button:active {
+        background: orangered;
+        border-color: blue;
+      } 
+      .marker {
+        font-family: arial, sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        color: #003366;
+        background: #ffe4b5;
+        padding: 1px;
+      }
+    </style>
+    <br/>
+    <span class="marker">Link of {{category.code}}</span>
+    <br/>
+    <label for="code">Name</label>
+    <input id="code"
+      type="text" size="32" value="{{code}}"
+    />
+    <br/>
+    <label for="url">Web Link</label>
+    <input id="url"
+      type="text" size="96" value="{{url}}"
+    />
+    <br/>
+    <label for="description">Description</label>
+    <input id="description"
+      type="text" size="96" value="{{description}}"
+    />
+    <br/>
+    <button on-click="update">Update</button>
+    <span id="message"></span>
+  </template>
+  <script type="application/dart" src="link_edit.dart"></script>
+</polymer-element>
