@@ -102,3 +102,10 @@ Can a Polymer component use CSS outside of the component?
 
 ===
 
+===
+When there is only one entity in entities, entities.order() does not provoke
+a refresh.
+When there is more than one entity, entities.order() does provoke
+a refresh.
+How to force a polymer component to be refreshed?
+===

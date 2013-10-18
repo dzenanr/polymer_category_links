@@ -1,4 +1,4 @@
-<polymer-element name="category-edit">
+<polymer-element name="category-add">
   <template>
     <style>
       label {
@@ -32,18 +32,14 @@
       } 
     </style>
     <br/>
-    <label>Name</label>
-    <input readonly="true" value="{{category.code}}"/>
+    <label for="code">Name</label>
+    <input id="code" type="text" size="32"/>
     <br/>
     <label for="description">Description</label>
-    <input id="description"
-      type="text" size="96" value="{{description}}"
-    />
+    <input id="description" type="text" size="96"/>
     <br/>
-    <button on-click="update">Update</button>
+    <button on-click="add">Add</button>
     <span id="message"></span>
   </template>
-  <script type="application/dart" src="category_edit.dart"></script>
+  <script type="application/dart" src="category_add.dart"></script>
 </polymer-element>
-
-
