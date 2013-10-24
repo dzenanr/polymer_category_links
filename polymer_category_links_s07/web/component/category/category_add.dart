@@ -6,6 +6,8 @@ import 'package:polymer/polymer.dart';
 class CategoryAdd extends PolymerElement {
   @published Categories categories;
 
+  CategoryAdd.created() : super.created();
+
   add(Event e, var detail, Node target) {
     InputElement code = $['code'];
     InputElement description = $['description'];
@@ -22,7 +24,7 @@ class CategoryAdd extends PolymerElement {
       category.description = description.value;
       if (categories.add(category)) {
         message.text = 'added';
-        categories.order(); // to see a new category in the list
+        categories.order();
       } else {
         message.text = 'category name already in use';
       }

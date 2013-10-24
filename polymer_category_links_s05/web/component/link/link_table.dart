@@ -8,8 +8,10 @@ class LinkTable extends PolymerElement {
   @published Links links;
   @observable bool showAdd = false;
 
-  inserted() {
-    super.inserted();
+  LinkTable.created() : super.created();
+
+  enteredView() {
+    super.enteredView();
     links = category.links;
     links.internalList = toObservable(links.internalList);
   }

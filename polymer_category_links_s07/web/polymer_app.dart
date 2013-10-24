@@ -6,9 +6,9 @@ import 'package:polymer/polymer.dart';
 @CustomTag('polymer-app')
 class PolymerApp extends PolymerElement {
   static const String NAME = 'polymer-category-links';
-  Categories categories;
+  @observable Categories categories;
 
-  PolymerApp() {
+  PolymerApp.created() : super.created() {
     var categoryLinksModel = new CategoryLinksModel();
     categories = categoryLinksModel.categories;
 

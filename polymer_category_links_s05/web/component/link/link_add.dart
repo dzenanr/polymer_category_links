@@ -6,6 +6,8 @@ import 'package:polymer/polymer.dart';
 class LinkAdd extends PolymerElement {
   @published Category category;
 
+  LinkAdd.created() : super.created();
+
   add(Event e, var detail, Node target) {
     InputElement code = $['code'];
     InputElement webLink = $['url'];

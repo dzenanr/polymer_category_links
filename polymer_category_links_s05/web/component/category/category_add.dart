@@ -6,6 +6,8 @@ import 'package:polymer/polymer.dart';
 class CategoryAdd extends PolymerElement {
   @published Categories categories;
 
+  CategoryAdd.created() : super.created();
+
   add(Event e, var detail, Node target) {
     InputElement code = $['code'];
     InputElement description = $['description'];

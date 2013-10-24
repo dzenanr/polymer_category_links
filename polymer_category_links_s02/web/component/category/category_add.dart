@@ -6,10 +6,12 @@ import 'package:polymer/polymer.dart';
 class CategoryAdd extends PolymerElement {
   @published Categories categories;
 
+  CategoryAdd.created() : super.created();
+
   add(Event e, var detail, Node target) {
-    InputElement code = shadowRoot.query("#code");
-    InputElement description = shadowRoot.query("#description");
-    Element message = shadowRoot.query("#message");
+    InputElement code = shadowRoot.querySelector("#code");
+    InputElement description = shadowRoot.querySelector("#description");
+    Element message = shadowRoot.querySelector("#message");
     var error = false;
     message.text = '';
     if (code.value.trim() == '') {

@@ -7,8 +7,10 @@ class CategoryTable extends PolymerElement {
   @published Categories categories;
   @observable bool showAdd = false;
 
+  CategoryTable.created() : super.created();
+
   show(Event e, var detail, Node target) {
-    ButtonElement addCategory = shadowRoot.query("#show-add");
+    ButtonElement addCategory = shadowRoot.querySelector("#show-add");
     if (addCategory.text == 'Show Add') {
       showAdd = true;
       addCategory.text = 'Hide Add';

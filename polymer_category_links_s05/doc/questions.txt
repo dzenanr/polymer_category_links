@@ -60,8 +60,8 @@ Use a non-composite property:
 
 @published String description;
 
-  inserted() {
-    super.inserted();
+  enteredView() {
+    super.enteredView();
     description = category.description;
   }
 
@@ -79,17 +79,9 @@ value="{{category.description}}"
 ===
 
 ===
-Do we need to use xtag when quering for an existing web component?
-var categoryTable = polymerApp.shadowRoot.query('#category-table').xtag;
-Yes
-The following does not work:
-var categoryTable = polymerApp.shadowRoot.query('#category-table');
-===
-
-===
 Tried in category_table.dart:
-  inserted() {
-    super.inserted();
+  enteredView()
+    super.enteredView();
     categories.internalList = toObservable(categories.internalList);
   }
 In polymer_app.dart:

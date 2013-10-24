@@ -11,8 +11,10 @@ class LinkEdit extends PolymerElement {
   @published String url;
   @published String description;
 
-  inserted() {
-    super.inserted();
+  LinkEdit.created() : super.created();
+
+  enteredView() {
+    super.enteredView();
     links = category.links;
     links.internalList = toObservable(links.internalList);
     code = link.code;
@@ -54,9 +56,9 @@ class LinkEdit extends PolymerElement {
         link.description = description;
       }
       links.order(); // even if code not changed, to see the updated list
-      var polymerApp = query('#polymer-app');
-      var categoryTable = polymerApp.shadowRoot.query('#category-table').xtag;
-      var linkTable = categoryTable.shadowRoot.query('#link-table').xtag;
+      var polymerApp = querySelector('#polymer-app');
+      var categoryTable = polymerApp.shadowRoot.querySelector('#category-table');
+      var linkTable = categoryTable.shadowRoot.querySelector('#link-table');
       linkTable.showEdit = false;
     }
   }

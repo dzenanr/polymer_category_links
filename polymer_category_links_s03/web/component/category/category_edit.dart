@@ -8,16 +8,18 @@ class CategoryEdit extends PolymerElement {
   @published Category category;
   @published String description;
 
-  inserted() {
-    super.inserted();
+  CategoryEdit.created() : super.created();
+
+  enteredView() {
+    super.enteredView();
     description = category.description;
   }
 
   update(Event e, var detail, Node target) {
     category.description = description;
     categories.order(); // to see a new description in the list
-    var polymerApp = query('#polymer-app');
-    var categoryTable = polymerApp.shadowRoot.query('#category-table').xtag;
+    var polymerApp = querySelector('#polymer-app');
+    var categoryTable = polymerApp.shadowRoot.querySelector('#category-table');
     categoryTable.showEdit = false;
   }
 }

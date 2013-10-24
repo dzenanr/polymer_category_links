@@ -10,6 +10,8 @@ class CategoryTable extends PolymerElement {
   @observable bool showEdit = false;
   @observable bool showCategoryLinks = false;
 
+  CategoryTable.created() : super.created();
+
   show(Event e, var detail, Node target) {
     ButtonElement addCategory = $['show-add'];
     if (addCategory.text == 'Show Add') {
