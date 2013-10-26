@@ -46,6 +46,7 @@ does not work: categories = toObservable(categoryLinksModel.categories);
 what works:
 categories = categoryLinksModel.categories;
 categories.internalList = toObservable(categories.internalList);
+// toObservable(categories.internalList); // does not work
 In repeat="{{category in categories.internalList}}":
 you cannot use categories.toList();
 you must use categories.internalList.
@@ -95,9 +96,9 @@ Can a Polymer component use CSS outside of the component?
 ===
 
 ===
-When an entity is deleted from entities,
+When an entity is added or deleted from entities,
 a table of entities is refreshed without entities.order().
-For a new entity or an updated entity,
+For an updated entity,
 entities.order() is used to refresh a table of entities
 (which may be artificial for update on a non-sorting property).
 How to force a polymer component to be refreshed without using entities.order()?
