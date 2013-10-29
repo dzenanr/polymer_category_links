@@ -70,7 +70,7 @@
     <table>
       <caption class="marker">
         Categories
-        <button id="show-add" class="button" on-click="show">Show Add</button>
+        <button id="show-add" class="button" on-click="{{show}}">Show Add</button>
       </caption>
       <tr>
         <th>Name</th>
@@ -81,7 +81,7 @@
         <tr>
           <td>{{category.code}}</td>
           <td>{{category.description}}</td>
-          <td><button on-click="edit" category-code={{category.code}}>Edit</button></td>
+          <td><button on-click="{{edit}}" category-code={{category.code}}>Edit</button></td>
         </tr>
       </tbody>
     </table>

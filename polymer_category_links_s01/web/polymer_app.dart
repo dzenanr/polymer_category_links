@@ -3,7 +3,6 @@ import 'package:polymer/polymer.dart';
 
 @CustomTag('polymer-app')
 class PolymerApp extends PolymerElement {
-  // Categories categories; // does not work wout @observable
   @observable Categories categories;
 
   PolymerApp.created() : super.created() {
