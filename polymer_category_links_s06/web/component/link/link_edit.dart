@@ -41,7 +41,7 @@ class LinkEdit extends PolymerElement {
           message.text = 'web link name already in use';
         } else {
           links.remove(link);
-          var link = new Link();
+          link = new Link();
           link.code = code;
           link.url = Uri.parse(url);
           link.description = description;
