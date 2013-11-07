@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:polymer_category_links/category_links.dart';
 import 'package:polymer/polymer.dart';
+import 'category_table.dart';
 
 @CustomTag('category-edit')
 class CategoryEdit extends PolymerElement {
@@ -19,7 +20,8 @@ class CategoryEdit extends PolymerElement {
     category.description = description;
     categories.order(); // to see a new description in the list
     var polymerApp = querySelector('#polymer-app');
-    var categoryTable = polymerApp.shadowRoot.querySelector('#category-table');
+    CategoryTable categoryTable =
+        polymerApp.shadowRoot.querySelector('#category-table');
     categoryTable.showEdit = false;
   }
 }
