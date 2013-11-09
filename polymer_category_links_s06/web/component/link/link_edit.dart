@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:polymer_category_links/category_links.dart';
 import 'package:polymer/polymer.dart';
+import 'link_table.dart';
 
 @CustomTag('link-edit')
 class LinkEdit extends PolymerElement {
@@ -58,7 +59,7 @@ class LinkEdit extends PolymerElement {
       links.order(); // even if code not changed, to see the updated list
       var polymerApp = querySelector('#polymer-app');
       var categoryTable = polymerApp.shadowRoot.querySelector('#category-table');
-      var linkTable = categoryTable.shadowRoot.querySelector('#link-table');
+      LinkTable linkTable = categoryTable.shadowRoot.querySelector('#link-table');
       linkTable.showEdit = false;
     }
   }
