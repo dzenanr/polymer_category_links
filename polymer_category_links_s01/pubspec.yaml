@@ -6,3 +6,6 @@ dependencies:
   dartlero:
     git: git://github.com/dzenanr/dartlero.git
   polymer: any
+transformers:
+- polymer:
+    entry_points: web/polymer_category_links.html
