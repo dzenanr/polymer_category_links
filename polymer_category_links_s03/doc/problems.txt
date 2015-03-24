@@ -1,0 +1,10 @@
+Problems
+
+Edit does not work. Description is not displayed in the Edit form.
+
+enteredView()
+-->
+attached()
+
+Now, the description is displayed. 
+Howeever, after the update the description is not refreshed in the table.

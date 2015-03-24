@@ -11,8 +11,8 @@ class CategoryEdit extends PolymerElement {
 
   CategoryEdit.created() : super.created();
 
-  enteredView() {
-    super.enteredView();
+  attached() {
+    super.attached();
     description = category.description;
   }
 

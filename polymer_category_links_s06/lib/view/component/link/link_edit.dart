@@ -14,8 +14,8 @@ class LinkEdit extends PolymerElement {
 
   LinkEdit.created() : super.created();
 
-  enteredView() {
-    super.enteredView();
+  attached() {
+    super.attached();
     links = category.links;
     links.internalList = toObservable(links.internalList);
     code = link.code;
