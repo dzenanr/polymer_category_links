@@ -1,0 +1,7 @@
+Update
+
+pubspec.yaml
+
+Pub Upgrade for the last version of Dartlero.
+
+Note that there is no Polymer nor the web folder.

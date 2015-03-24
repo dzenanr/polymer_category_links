@@ -1,0 +1,67 @@
+Polymer Update
+
+pubspec.yaml
+
+  polymer: any
+-->
+  polymer: '>=0.15.4 <0.16.0'
+
+----
+
+build.dart
+
+import 'package:polymer/builder.dart';
+
+void main() {
+  build(entryPoints: ['web/polymer_category_links.html']);
+}
+
+-->
+
+// Copyright (c) 2015, <your name>. All rights reserved. Use of this source code
+// is governed by a BSD-style license that can be found in the LICENSE file.
+
+// This file is only used by Dart Editor. It displays errors and warnings after
+// analyzing a polymer.dart app.
+
+export 'package:polymer/default_build.dart';
+
+----
+
+lib
+
++ add the view folder
++ in the view folder add the component folder
++ in the component folder add the category folder
+
+web
+
++ move the corresponding component files from the web folder to the lib folder
++ delete the component folder in the web folder
++ move the polymer_app files from the web folder to the view folder
++ update the href attribute in polymer_category_links.html
+href="polymer_app.html"
+-->
+href="packages/polymer_category_links/view/polymer_app.html"
+
+lib
+
++ update view/polymer_app.html
+remove link tag in the polymer_element
+<link rel="import" href="component/category/category_table.html">
+add link tags before the polymer_element
+<link rel="import" href="../../../packages/polymer/polymer.html">
+<link rel="import" href="../../../packages/polymer_category_links/view/component/category/category_table.html">
+
++ update view/component/category html files
+category_table.html
+remove link tags in the polymer_element
+add link tags before the polymer_element
+<link rel="import" href="../../../../../packages/polymer/polymer.html">
+<link rel="import" href="../../../../../packages/polymer_category_links/view/component/category/category_add.html">
+category_add.html
+add link tag before the polymer_element
+<link rel="import" href="../../../../../packages/polymer/polymer.html">
+
+
+

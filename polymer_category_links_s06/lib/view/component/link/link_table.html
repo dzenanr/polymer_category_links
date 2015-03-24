@@ -1,0 +1,108 @@
+<link rel="import" href="../../../../../packages/polymer/polymer.html">
+<link rel="import" href="../../../../../packages/polymer_category_links/view/component/link/link_add.html">
+<link rel="import" href="../../../../../packages/polymer_category_links/view/component/link/link_edit.html">
+
+<polymer-element name="link-table">
+  <template>
+    <style>
+      table {
+        border-top: 1px solid #999;
+        border-left: 1px solid #999;
+        border-collapse: collapse;
+      }  
+      caption {
+        font-family: arial, sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        color: #003366;
+        padding: 1px;
+      }    
+      th, td {
+        padding: 1px;
+        border-right: 1px solid #999999;
+        border-bottom: 1px solid #999999;
+      }
+      th {
+        font-family: verdana, sans-serif;
+        font-weight: bold;
+        color: #ffffff;
+        background: #336799;
+      }
+      td {
+        background: #ffe4b5;
+      }  
+      button {
+        padding: 1px;
+        background: #ffcc99;
+        border-right: 1px solid #999;
+        border-bottom: 1px solid #999;
+        border-style: outset;
+        border-color: #d7b9c9;
+        font-weight: bold;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      button:active {
+        background: orangered;
+        border-color: blue;
+      } 
+      a:link {
+        text-decoration: none;
+        font-weight: bold;
+        color: #003366;
+      }   
+      a:visited {
+        text-decoration: none;
+        font-weight: bold;
+        color: #c50000;
+      }   
+      a:hover {
+        text-decoration: none;
+        color: #d9ece2;
+        background: #663117;
+      }
+      .marker {
+        font-family: arial, sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        color: #003366;
+        background: #ffe4b5;
+        padding: 1px;
+      } 
+    </style>
+    <template if="{{showAdd}}">
+      <link-add category="{{category}}"></link-add>
+    </template>
+    <template if="{{showEdit}}">
+      <link-edit 
+        category="{{category}}"
+        link="{{link}}"
+      >
+      </link-edit>
+    </template>
+    <table>
+      <caption class="marker">
+        Links of {{category.code}} 
+        <button id="show-add" class="button" on-click="{{show}}">Show Add</button>
+      </caption>
+      <tr>
+        <th>Web Link</th>
+        <th>Description</th>
+        <th>Edit</th>
+      </tr>
+      <tbody template repeat="{{link in links.internalList}}">
+        <tr>
+          <td>
+            <a _href="{{link.url}}">
+              {{link.code}}
+            </a>
+          </td>
+          <td>{{link.description}}</td>
+          <td><button on-click="{{edit}}" link-code="{{link.code}}">Edit</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </template>
+  <script type="application/dart" src="link_table.dart"></script>
+</polymer-element>
