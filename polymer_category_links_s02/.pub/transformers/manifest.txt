@@ -1,2 +1,2 @@
 1.9.1
-polymer
+code_transformers/src/delete_file,initialize,initialize/build/loader_replacer,observe,smoke/src/default_transformer,web_components,web_components/build/mirrors_remover
