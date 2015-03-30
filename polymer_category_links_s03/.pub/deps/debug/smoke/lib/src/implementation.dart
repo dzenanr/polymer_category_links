@@ -17,18 +17,15 @@ import 'package:smoke/smoke.dart';
 
 /// Implementation of [ObjectAccessorService] in use, initialized lazily so it
 /// can be replaced at deployment time with an efficient alternative.
-ObjectAccessorService objectAccessor =
-    throwNotConfiguredError();
+ObjectAccessorService objectAccessor = throwNotConfiguredError();
 
 /// Implementation of [TypeInspectorService] in use, initialized lazily so it
 /// can be replaced at deployment time with an efficient alternative.
-TypeInspectorService typeInspector =
-    throwNotConfiguredError();
+TypeInspectorService typeInspector = throwNotConfiguredError();
 
 /// Implementation of [SymbolConverterService] in use, initialized lazily so it
 /// can be replaced at deployment time with an efficient alternative.
-SymbolConverterService symbolConverter =
-    throwNotConfiguredError();
+SymbolConverterService symbolConverter = throwNotConfiguredError();
 
 throwNotConfiguredError() {
   throw new Exception('The "smoke" library has not been configured. '

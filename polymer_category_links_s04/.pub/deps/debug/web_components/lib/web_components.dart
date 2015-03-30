@@ -4,5 +4,6 @@
 library web_components;
 
 export 'src/custom_element.dart';
+export 'src/init.dart';
 export 'custom_element_proxy.dart';
 export 'html_import_annotation.dart';

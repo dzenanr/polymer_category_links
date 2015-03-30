@@ -103,7 +103,29 @@ class LineSplitter {
   List<int> apply(StringBuffer buffer) {
     if (debugFormatter) dumpLine(_chunks, _indent);
 
+    var nestingDepth = _flattenNestingLevels();
+
+    // Hack. The formatter doesn't handle formatting very deeply nested code
+    // well. It can make performance spiral into a pit of sadness. Fortunately,
+    // we only tend to see expressions pathologically deeply nested in
+    // generated code that isn't read by humans much anyway. To avoid burning
+    // too much time on these, harden any splits containing more than a certain
+    // level of nesting.
+    //
+    // The number here was chosen empirically based on formatting the repo. It
+    // was picked to get the best performance while affecting the minimum amount
+    // of results.
+    // TODO(rnystrom): Do something smarter.
+    if (nestingDepth > 9) {
+      for (var chunk in _chunks) {
+        if (chunk.param != null && nestingDepth - chunk.nesting > 9) {
+          chunk.harden();
+        }
+      }
+    }
+
     var splits = _findBestSplits(new LinePrefix());
+
     var selection = [null, null];
 
     // Write each chunk and the split after it.
@@ -140,6 +162,47 @@ class LineSplitter {
     }
 
     return selection;
+  }
+
+  /// Removes any unused nesting levels from the chunks.
+  ///
+  /// The line splitter considers every possible combination of mapping
+  /// indentation to nesting levels when trying to find the best solution. For
+  /// example, it may assign 4 spaces of indentation to level 1, 8 spaces to
+  /// level 3, etc.
+  ///
+  /// It's fairly common for a nesting level to not actually appear at the
+  /// boundary of a chunk. The source visitor may enter more than one level of
+  /// nesting at a point where a split cannot happen. In that case, there's no
+  /// point in trying to assign an indentation level to that nesting level. It
+  /// will never be used because no line will begin at that level of
+  /// indentation.
+  ///
+  /// Worse, if the splitter *does* consider these levels, it can dramatically
+  /// increase solving time. To avoid that, this renumbers all of the nesting
+  /// levels in the chunks to not have any of these unused gaps.
+  ///
+  /// Returns the number of distinct nesting levels remaining after flattening.
+  /// This may be zero if the chunks have no nesting (i.e. just statement-level
+  /// indentation).
+  int _flattenNestingLevels() {
+    var nestingLevels = _chunks
+        .map((chunk) => chunk.nesting)
+        .where((nesting) => nesting != -1)
+        .toSet()
+        .toList();
+    nestingLevels.sort();
+
+    var nestingMap = {-1: -1};
+    for (var i = 0; i < nestingLevels.length; i++) {
+      nestingMap[nestingLevels[i]] = i;
+    }
+
+    for (var chunk in _chunks) {
+      chunk.nesting = nestingMap[chunk.nesting];
+    }
+
+    return nestingLevels.length;
   }
 
   /// Finds the best set of splits to apply to the remainder of the line
@@ -328,6 +391,8 @@ class LineSplitter {
   bool _suffixContainsParam(int split, SplitParam param) {
     if (param == null) return false;
 
+    // TODO(rnystrom): Consider caching the set of params that appear at every
+    // suffix.
     for (var i = split + 1; i < _chunks.length; i++) {
       if (_chunks[i].isSoftSplit && _chunks[i].param == param) {
         return true;

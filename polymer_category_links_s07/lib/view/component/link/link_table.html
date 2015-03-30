@@ -95,7 +95,7 @@
       <tbody template repeat="{{link in links.internalList}}">
         <tr>
           <td>
-            <a _href="{{link.url}}">
+            <a _href="{{link.url.toString()}}">
               {{link.code}}
             </a>
           </td>

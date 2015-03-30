@@ -31,6 +31,8 @@ class LinkAdd extends PolymerElement {
       if (category.links.add(link)) {
         message.text = 'added';
         category.links.order();
+        var polymerApp = querySelector('#polymer-app');
+        polymerApp.save();
       } else {
         message.text = 'web link name already in use';
       }

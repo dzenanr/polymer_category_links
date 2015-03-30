@@ -7,4 +7,4 @@ enteredView()
 attached()
 
 Now, the description is displayed. 
-Howeever, after the update the description is not refreshed in the table.
+Howeever, after the update, the description is not refreshed in the table.

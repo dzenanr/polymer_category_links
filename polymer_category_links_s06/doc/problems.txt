@@ -1,0 +1,10 @@
+Problems
+
+No more the Save button.
+After the description update, the description is refreshed in the table.
+In the update method of the CategoryEdit class:
+    var polymerApp = querySelector('#polymer-app');
+    polymerApp.save();
+    window.location.reload();
+
+    

@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:convert';
-import 'package:polymer_category_links/category_links.dart';
 import 'package:polymer/polymer.dart';
+import 'package:polymer_category_links/category_links.dart';
 
 @CustomTag('polymer-app')
 class PolymerApp extends PolymerElement {
@@ -23,7 +23,7 @@ class PolymerApp extends PolymerElement {
     categories.internalList = toObservable(categories.internalList);
   }
 
-  save(Event e, var detail, Node target) {
+  save() {
     window.localStorage[NAME] = JSON.encode(categories.toJson());
   }
 }

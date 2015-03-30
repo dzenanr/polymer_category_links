@@ -12,8 +12,8 @@ class LinkTable extends PolymerElement {
 
   LinkTable.created() : super.created();
 
-  enteredView() {
-    super.enteredView();
+  attached() {
+    super.attached();
     links = category.links;
     links.internalList = toObservable(links.internalList);
   }
@@ -39,5 +39,7 @@ class LinkTable extends PolymerElement {
     String code = target.attributes['link-code'];
     link = links.find(code);
     links.remove(link);
+    var polymerApp = querySelector('#polymer-app');
+    polymerApp.save();
   }
 }

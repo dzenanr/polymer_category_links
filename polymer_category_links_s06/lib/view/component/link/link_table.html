@@ -1,4 +1,3 @@
-<link rel="import" href="../../../../../packages/polymer/polymer.html">
 <link rel="import" href="../../../../../packages/polymer_category_links/view/component/link/link_add.html">
 <link rel="import" href="../../../../../packages/polymer_category_links/view/component/link/link_edit.html">
 
@@ -94,7 +93,7 @@
       <tbody template repeat="{{link in links.internalList}}">
         <tr>
           <td>
-            <a _href="{{link.url}}">
+            <a _href="{{link.url.toString()}}">
               {{link.code}}
             </a>
           </td>

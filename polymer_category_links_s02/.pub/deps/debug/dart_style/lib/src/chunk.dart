@@ -87,8 +87,7 @@ class Chunk extends Selection {
   ///     someFunctionName(argument, argument,
   ///         argument, anotherFunction(argument,
   ///             argument));
-  int get nesting => _nesting;
-  int _nesting = -1;
+  int nesting = -1;
 
   /// Whether or not the chunk occurs inside an expression.
   ///
@@ -96,7 +95,7 @@ class Chunk extends Selection {
   /// are to determine the indentation of subsequent lines. "Statement level"
   /// splits that occur between statements or in the top-level of a unit only
   /// take the main indent level into account.
-  bool get isInExpression => _nesting != -1;
+  bool get isInExpression => nesting != -1;
 
   /// Whether it's valid to add more text to this chunk or not.
   ///
@@ -181,7 +180,7 @@ class Chunk extends Selection {
 
     // Last newline settings win.
     _indent = indent;
-    _nesting = nesting;
+    this.nesting = nesting;
     _spaceWhenUnsplit = spaceWhenUnsplit;
 
     // Preserve a blank line.
@@ -194,7 +193,7 @@ class Chunk extends Selection {
     if (text.isNotEmpty) parts.add("${Color.bold}$text${Color.none}");
 
     if (_indent != 0 && _indent != null) parts.add("indent:$_indent");
-    if (_nesting != -1) parts.add("nest:$_nesting");
+    if (nesting != -1) parts.add("nest:$nesting");
     if (spaceWhenUnsplit) parts.add("space");
     if (_isDouble) parts.add("double");
 
@@ -231,8 +230,18 @@ class Cost {
   /// greater number of nested spans.
   static const normal = 1;
 
-  /// The cost of splitting after a "=" both for assignment and initialization.
+  /// Splitting after a "=" both for assignment and initialization.
   static const assignment = 2;
+
+  /// Splitting before the first argument when it happens to be a function
+  /// expression with a block body.
+  static const firstBlockArgument = 2;
+
+  /// The series of positional arguments.
+  static const positionalArguments = 2;
+
+  /// Splitting inside the brackets of a list with only one element.
+  static const singleElementList = 2;
 
   /// The cost of a single character that goes past the page limit.
   ///
@@ -268,7 +277,8 @@ class SplitParam {
   final implies = <SplitParam>[];
 
   /// Creates a new [SplitParam].
-  SplitParam([this.cost = Cost.normal]);
+  SplitParam([int cost])
+      : cost = cost != null ? cost : Cost.normal;
 
   String toString() => "$id";
 
@@ -284,7 +294,8 @@ class SplitParam {
 /// together, like parameter lists and binary operator expressions.
 class Span {
   /// Index of the first chunk contained in this span.
-  final int start;
+  int get start => _start;
+  int _start;
 
   /// Index of the last chunk contained in this span.
   int get end => _end;
@@ -294,7 +305,7 @@ class Span {
   /// if the span is for a multisplit.
   final int cost;
 
-  Span(this.start, this.cost);
+  Span(this._start, this.cost);
 
   /// Marks this span as ending at [end].
   void close(int end) {
@@ -314,6 +325,23 @@ class Span {
     if (cost != null) result += " \$$cost";
 
     return result + ")";
+  }
+
+  /// Shifts the indexes of the chunk down by [offset].
+  ///
+  /// This is used when a prefix of the chunk list gets pulled off by the
+  /// [LineWriter] after it gets formatted as a line. The remaining spans need
+  /// to have their indices shifted to account for the removed chunks.
+  ///
+  /// Returns `true` if the span has shifted all the way off the front and
+  /// should just be discarded.
+  bool shift(int offset) {
+    if (end != null && end < offset) return true;
+
+    _start -= offset;
+    if (_end != null) _end -= offset;
+
+    return false;
   }
 }
 

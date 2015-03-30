@@ -105,13 +105,51 @@ class SourceVisitor implements AstVisitor {
     // Nest around the parentheses in case there are comments before or after
     // them.
     _writer.nestExpression();
+
     token(node.leftParenthesis);
 
+    // Corner case: If the first argument to a method is a block-bodied
+    // function, it looks bad if its parameter list gets wrapped to the next
+    // line. Bump the cost to try to avoid that. This prefers:
+    //
+    //     receiver
+    //         .method()
+    //         .chain((parameter, list) {
+    //       ...
+    //     });
+    //
+    // over:
+    //
+    //     receiver.method().chain(
+    //         (parameter, list) {
+    //       ...
+    //     });
+    // TODO(rnystrom): This causes a function expression's long parameter list
+    // to get split instead, like:
+    //
+    //     receiver.method((longParameter,
+    //         anotherParameter) {
+    //       ...
+    //     });
+    //
+    // Instead of bumping the cost, this should wrap a span around the "("
+    // before the argument list and the function's parameter list. That requires
+    // spans to not strictly be a stack, though, so would be a larger change
+    // than I want to do right now.
+    var cost = Cost.normal;
+    if (node.arguments.isNotEmpty) {
+      var firstArg = node.arguments.first;
+      if (firstArg is FunctionExpression &&
+          firstArg.body is BlockFunctionBody) {
+        cost = Cost.firstBlockArgument;
+      }
+    }
+
     // Allow splitting after "(".
-    var lastParam = zeroSplit();
+    var lastParam = zeroSplit(cost);
 
     // Try to keep the positional arguments together.
-    _writer.startSpan();
+    _writer.startSpan(Cost.positionalArguments);
 
     var i = 0;
     for (; i < node.arguments.length; i++) {
@@ -560,9 +598,7 @@ class SourceVisitor implements AstVisitor {
     visit(node.parameter);
     if (node.separator != null) {
       // The '=' separator is preceded by a space.
-      if (node.separator.type == TokenType.EQ) {
-        space();
-      }
+      if (node.separator.type == TokenType.EQ) space();
       token(node.separator);
       visit(node.defaultValue, before: space);
     }
@@ -606,24 +642,14 @@ class SourceVisitor implements AstVisitor {
     space();
     visit(node.name);
     space();
-    token(node.leftBracket);
 
-    _writer.indent();
-    _writer.startMultisplit();
-    _writer.multisplit(space: true);
+    _startBody(node.leftBracket, space: true);
 
     visitCommaSeparatedNodes(node.constants, between: () {
       _writer.multisplit(space: true);
     });
 
-    // Trailing comma.
-    if (node.rightBracket.previous.lexeme == ",") {
-      token(node.rightBracket.previous);
-    }
-
-    _writer.unindent();
-    _writer.multisplit(space: true);
-    token(node.rightBracket);
+    _endBody(node.rightBracket, space: true);
   }
 
   visitExportDirective(ExportDirective node) {
@@ -680,6 +706,7 @@ class SourceVisitor implements AstVisitor {
   }
 
   visitFieldFormalParameter(FieldFormalParameter node) {
+    visitParameterMetadata(node.metadata);
     token(node.keyword, after: space);
     visit(node.type, after: space);
     token(node.thisToken);
@@ -690,6 +717,7 @@ class SourceVisitor implements AstVisitor {
 
   visitForEachStatement(ForEachStatement node) {
     _writer.nestExpression();
+    token(node.awaitKeyword, after: space);
     token(node.forKeyword);
     space();
     token(node.leftParenthesis);
@@ -701,7 +729,7 @@ class SourceVisitor implements AstVisitor {
     split();
     token(node.inKeyword);
     space();
-    visit(node.iterator);
+    visit(node.iterable);
     token(node.rightParenthesis);
     space();
     visit(node.body);
@@ -848,6 +876,7 @@ class SourceVisitor implements AstVisitor {
   }
 
   visitFunctionTypedFormalParameter(FunctionTypedFormalParameter node) {
+    visitParameterMetadata(node.metadata);
     visit(node.returnType, after: space);
 
     // Try to keep the function's parameters with its name.
@@ -917,12 +946,14 @@ class SourceVisitor implements AstVisitor {
       visit(node.target);
     }
 
+    _writer.startSpan();
     token(node.leftBracket);
     _writer.nestExpression();
     zeroSplit();
     visit(node.index);
     token(node.rightBracket);
     _writer.unnest();
+    _writer.endSpan();
   }
 
   visitInstanceCreationExpression(InstanceCreationExpression node) {
@@ -986,8 +1017,11 @@ class SourceVisitor implements AstVisitor {
   }
 
   visitListLiteral(ListLiteral node) {
+    // Corner case: Splitting inside a list looks bad if there's only one
+    // element, so make those more costly.
+    var cost = node.elements.length <= 1 ? Cost.singleElementList : Cost.normal;
     _visitCollectionLiteral(
-        node, node.leftBracket, node.elements, node.rightBracket);
+        node, node.leftBracket, node.elements, node.rightBracket, cost);
   }
 
   visitMapLiteral(MapLiteral node) {
@@ -1133,6 +1167,14 @@ class SourceVisitor implements AstVisitor {
 
   visitPrefixExpression(PrefixExpression node) {
     token(node.operator);
+
+    // Corner case: put a space between successive "-" operators so we don't
+    // inadvertently turn them into a "--" decrement operator.
+    if (node.operand is PrefixExpression &&
+        (node.operand as PrefixExpression).operator.lexeme == "-") {
+      space();
+    }
+
     visit(node.operand);
   }
 
@@ -1526,23 +1568,26 @@ class SourceVisitor implements AstVisitor {
 
     if (between == null) between = space;
 
-    visit(nodes.first);
+    var first = true;
+    for (var node in nodes) {
+      if (!first) between();
+      first = false;
 
-    for (var node in nodes.skip(1)) {
-      token(node.beginToken.previous); // Comma.
-      between();
       visit(node);
+
+      // The comma after the node.
+      if (node.endToken.next.lexeme == ",") token(node.endToken.next);
     }
   }
 
   /// Visits the collection literal [node] whose body starts with [leftBracket],
   /// ends with [rightBracket] and contains [elements].
   void _visitCollectionLiteral(TypedLiteral node, Token leftBracket,
-      Iterable<AstNode> elements, Token rightBracket) {
+      Iterable<AstNode> elements, Token rightBracket, [int cost]) {
     modifier(node.constKeyword);
     visit(node.typeArguments);
 
-    _startBody(leftBracket);
+    _startBody(leftBracket, cost: cost);
 
     // Each list element takes at least 3 characters (one character for the
     // element, one for the comma, one for the space), so force it to split if
@@ -1642,29 +1687,35 @@ class SourceVisitor implements AstVisitor {
   }
   /// Writes an opening bracket token ("(", "{", "[") and handles indenting and
   /// starting the multisplit it contains.
-  void _startBody(Token leftBracket) {
+  ///
+  /// If [space] is `true`, then the initial multisplit will use a space if not
+  /// split.
+  void _startBody(Token leftBracket, {int cost, bool space: false}) {
     token(leftBracket);
 
     // Indent the body.
-    _writer.startMultisplit();
+    _writer.startMultisplit(cost: cost);
     _writer.indent();
 
     // Split after the bracket.
-    _writer.multisplit();
+    _writer.multisplit(space: space);
   }
 
   /// Writes a closing bracket token (")", "}", "]") and handles unindenting
   /// and ending the multisplit it contains.
   ///
   /// Used for blocks, other curly bodies, and collection literals.
-  void _endBody(Token rightBracket) {
+  ///
+  /// If [space] is `true`, then the initial multisplit will use a space if not
+  /// split.
+  void _endBody(Token rightBracket, {bool space: false}) {
     token(rightBracket, before: () {
       // Split before the closing bracket character.
       _writer.unindent();
-      _writer.multisplit();
-    }, after: () {
-      _writer.endMultisplit();
+      _writer.multisplit(space: space);
     });
+
+    _writer.endMultisplit();
   }
 
   /// Returns `true` if [node] is immediately contained within an anonymous
@@ -1736,7 +1787,7 @@ class SourceVisitor implements AstVisitor {
   /// Writes a split that is the empty string when unsplit.
   ///
   /// Returns the newly created [SplitParam].
-  SplitParam zeroSplit() => _writer.writeSplit();
+  SplitParam zeroSplit([int cost]) => _writer.writeSplit(cost: cost);
 
   /// Emit [token], along with any comments and formatted whitespace that comes
   /// before it.

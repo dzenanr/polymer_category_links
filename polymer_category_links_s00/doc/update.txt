@@ -1,6 +1,7 @@
 Update
 
 pubspec.yaml
+  dartlero: any
 
 Pub Upgrade for the last version of Dartlero.
 

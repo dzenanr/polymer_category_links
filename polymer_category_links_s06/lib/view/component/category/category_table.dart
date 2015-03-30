@@ -1,6 +1,6 @@
 import 'dart:html';
-import 'package:polymer_category_links/category_links.dart';
 import 'package:polymer/polymer.dart';
+import 'package:polymer_category_links/category_links.dart';
 
 @CustomTag('category-table')
 class CategoryTable extends PolymerElement {
@@ -34,6 +34,8 @@ class CategoryTable extends PolymerElement {
     category = categories.find(code);
     categories.remove(category);
     showCategoryLinks = false;
+    var polymerApp = querySelector('#polymer-app');
+    polymerApp.save();
   }
 
   showLinks(Event e, var detail, Element target) {

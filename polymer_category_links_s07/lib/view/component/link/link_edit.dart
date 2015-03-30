@@ -36,11 +36,13 @@ class LinkEdit extends PolymerElement {
       error = true;
     }
     if (!error) {
+      var polymerApp = querySelector('#polymer-app');
       if (link.code != code) {
         var existingLink = links.find(code);
         if (existingLink != null) {
           message.text = 'web link name already in use';
         } else {
+          var linkBeforeRemove = link;
           links.remove(link);
           link = new Link();
           link.code = code;
@@ -48,16 +50,19 @@ class LinkEdit extends PolymerElement {
           link.description = description;
           if (links.add(link)) {
             message.text = 'added';
+            polymerApp.save();
+            window.location.reload();
           } else {
+            links.add(linkBeforeRemove);
             message.text = 'not added';
           }
         }
       } else {
         link.url = Uri.parse(url);
         link.description = description;
+        polymerApp.save();
+        window.location.reload();
       }
-      links.order(); // even if code not changed, to see the updated list
-      var polymerApp = querySelector('#polymer-app');
       var categoryTable = polymerApp.shadowRoot.querySelector('#category-table');
       LinkTable linkTable = categoryTable.shadowRoot.querySelector('#link-table');
       linkTable.showEdit = false;

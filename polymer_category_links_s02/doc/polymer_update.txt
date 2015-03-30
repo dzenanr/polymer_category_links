@@ -1,10 +1,7 @@
 Polymer Update
 
 pubspec.yaml
-
   polymer: any
--->
-  polymer: '>=0.15.4 <0.16.0'
 
 ----
 
@@ -49,19 +46,15 @@ lib
 + update view/polymer_app.html
 remove link tag in the polymer_element
 <link rel="import" href="component/category/category_table.html">
-add link tags before the polymer_element
-<link rel="import" href="../../../packages/polymer/polymer.html">
+add link tag before the polymer_element
 <link rel="import" href="../../../packages/polymer_category_links/view/component/category/category_table.html">
 
 + update view/component/category html files
 category_table.html
 remove link tags in the polymer_element
-add link tags before the polymer_element
-<link rel="import" href="../../../../../packages/polymer/polymer.html">
-<link rel="import" href="../../../../../packages/polymer_category_links/view/component/category/category_add.html">
-category_add.html
 add link tag before the polymer_element
-<link rel="import" href="../../../../../packages/polymer/polymer.html">
+<link rel="import" href="../../../../../packages/polymer_category_links/view/component/category/category_add.html">
+
 
 
 

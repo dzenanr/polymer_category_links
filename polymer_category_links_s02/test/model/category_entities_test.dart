@@ -1,5 +1,4 @@
 import 'package:unittest/unittest.dart';
-import 'package:dartlero/dartlero.dart';
 import 'package:polymer_category_links/category_links.dart';
 
 testCategories() {

@@ -1,5 +1,5 @@
-import 'package:polymer_category_links/category_links.dart';
 import 'package:polymer/polymer.dart';
+import 'package:polymer_category_links/category_links.dart';
 
 @CustomTag('polymer-app')
 class PolymerApp extends PolymerElement {

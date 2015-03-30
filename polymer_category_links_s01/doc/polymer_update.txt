@@ -1,10 +1,9 @@
 Polymer Update
 
-pubspec.yaml
+add .pub to the .gitignore file in the project root folder
 
+pubspec.yaml
   polymer: any
--->
-  polymer: '>=0.15.4 <0.16.0'
 
 ----
 
@@ -50,14 +49,12 @@ lib
 remove link tag in the polymer_element
 <link rel="import" href="component/category/category_table.html">
 add link tags before the polymer_element
-<link rel="import" href="../../../packages/polymer/polymer.html">
 <link rel="import" href="../../../packages/polymer_category_links/view/component/category/category_table.html">
 
 + update view/component/category html files
 category_table.html
 remove link tags in the polymer_element
-add link tags before the polymer_element
-<link rel="import" href="../../../../../packages/polymer/polymer.html">
+
 
 
 

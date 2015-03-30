@@ -1,6 +1,6 @@
 import 'dart:html';
-import 'package:polymer_category_links/category_links.dart';
 import 'package:polymer/polymer.dart';
+import 'package:polymer_category_links/category_links.dart';
 
 @CustomTag('category-add')
 class CategoryAdd extends PolymerElement {
@@ -25,6 +25,8 @@ class CategoryAdd extends PolymerElement {
       if (categories.add(category)) {
         message.text = 'added';
         categories.order();
+        var polymerApp = querySelector('#polymer-app');
+        polymerApp.save();
       } else {
         message.text = 'category name already in use';
       }

@@ -1,6 +1,6 @@
 import 'dart:html';
-import 'package:polymer_category_links/category_links.dart';
 import 'package:polymer/polymer.dart';
+import 'package:polymer_category_links/category_links.dart';
 
 @CustomTag('link-table')
 class LinkTable extends PolymerElement {
@@ -10,8 +10,8 @@ class LinkTable extends PolymerElement {
 
   LinkTable.created() : super.created();
 
-  enteredView() {
-    super.enteredView();
+  attached() {
+    super.attached();
     links = category.links;
     links.internalList = toObservable(links.internalList);
   }
