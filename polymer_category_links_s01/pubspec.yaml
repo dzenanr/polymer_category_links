@@ -3,6 +3,7 @@ author: Dzenan Ridjanovic <dzenanr@gmail.com>
 description: A model with 1 concept that uses dartlero.
 homepage: http://ondart.me/
 dependencies:
+  browser: any
   dartlero: any
   polymer: any
 transformers:
