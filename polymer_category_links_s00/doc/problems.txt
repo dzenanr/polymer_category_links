@@ -1,0 +1,9 @@
+Problems
+
+Not error any more.
+Running test/model/category_entities_test.dart
+
+Uncaught Error: Load Error: FileSystemException: Cannot open file,
+path = 'C:\Users\ridjanod.FSA-RIDJANOD-2\dart\ui\polymer_category_links\
+polymer_category_links_s00\test\model\packages\path\path.dart'
+(OS Error: Le chemin d’accès spécifié est introuvable.

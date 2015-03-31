@@ -1,3 +1,17 @@
 Problems
 
-No problems.
+From Tools Output when running the app in Dartium:
+
+--- 11:17:14 AM Starting pub serve : polymer_project_tasks ---
+Loading source assets...
+Loading polymer transformers...
+Transformer library "package:polymer/polymer.dart" not found.
+
+Then in a display window (Error Launching Application):
+Could not start pub serve or connect to pub
+
+Solution:
+In Run/ManageLaunches
+select the html file used to Run in Dartium
+deselect Use pub serve to serve the application
+
